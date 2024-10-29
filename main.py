@@ -1,7 +1,6 @@
 import heapq
-import numpy as np
-from utils import *
 import time
+from utils import *
 
 class Node:
     def __init__(self, state, parent, g, h):
@@ -31,25 +30,28 @@ def aStar(start, goal, heuristic):
     startNode = Node(start, None, 0, heuristic(start))
     frontier = [startNode]
     explored = set()
-    
+    cost_so_far = {start: 0}  # Tracks the lowest g cost to each state
+
     while frontier:
         currentNode = heapq.heappop(frontier)
-        explored.add(currentNode.state)
-        # print(f"Exploring {currentNode}")
         
         if currentNode.state == goal:
-            path = [currentNode.state]
-            while currentNode.parent:
-                path.append(currentNode.parent.state)
+            path = []
+            while currentNode:
+                path.append(currentNode.state)
                 currentNode = currentNode.parent
             t = time.time() - t
             return path[::-1], explored, t
+
+        explored.add(currentNode.state)
         
         for childState in getChildren(currentNode.state):
-            if childState not in explored:
-                childNode = Node(childState, currentNode, currentNode.g + 1, heuristic(childState))
-                if childNode not in frontier:
-                    heapq.heappush(frontier, childNode)
+            new_cost = currentNode.g + 1
+            if childState not in explored or new_cost < cost_so_far.get(childState, float('inf')):
+                cost_so_far[childState] = new_cost
+                childNode = Node(childState, currentNode, new_cost, heuristic(childState))
+                heapq.heappush(frontier, childNode)
+                
     return None
 
 if __name__ == "__main__":
@@ -61,4 +63,3 @@ if __name__ == "__main__":
     print(f"Length of Manhattan path: {len(manhattanPath) - 1}")
     print(f"number of nodes explored: {len(explored)}")
     print(f"time taken: {t}")
-
