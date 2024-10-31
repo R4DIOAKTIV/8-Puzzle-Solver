@@ -59,3 +59,8 @@ def isSolvable(state):
             if state[i] > state[j]:
                 inversions += 1
     return inversions % 2 == 0
+
+def randomState():
+    state = list("012345678")
+    np.random.shuffle(state)
+    return "".join(state)
