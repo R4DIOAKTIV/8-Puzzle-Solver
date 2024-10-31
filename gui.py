@@ -101,15 +101,15 @@ class PuzzleApp(QMainWindow):
         algorithm = self.algorithmComboBox.currentText()
         
         if algorithm == "A* Manhattan":
-            self.solutionPath, explored, t= aStar(start, goal, calculateManhattan)
+            self.solutionPath, explored, t, max_depth= aStar(start, goal, calculateManhattan)
         elif algorithm == "A* Euclidean":
-            self.solutionPath, explored, t = aStar(start, goal, calculateEuclidean)
+            self.solutionPath, explored, t, max_depth = aStar(start, goal, calculateEuclidean)
         elif algorithm == "BFS":
-            self.solutionPath, explored, t = BFS(start, goal)
+            self.solutionPath, explored, t, max_depth = BFS(start, goal)
         elif algorithm == "DFS":
-            self.solutionPath, explored, t = DFS(start, goal)
+            self.solutionPath, explored, t, max_depth = DFS(start, goal)
         elif algorithm == "IDS":
-            self.solutionPath, explored, t= IDS(start, goal)
+            self.solutionPath, explored, t, max_depth= IDS(start, goal)
         
         self.currentStep = 0
         self.messageLabel.setText(f"Path found with {algorithm}.")
