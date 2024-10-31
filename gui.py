@@ -1,14 +1,14 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QVBoxLayout, QGridLayout, QWidget, QLineEdit, QHBoxLayout
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QVBoxLayout, QGridLayout, QWidget, QLineEdit, QHBoxLayout, QComboBox
 from PyQt5.QtCore import Qt  # Import Qt namespace
-from main import aStar
-from utils import calculateManhattan
+from main import aStar, BFS, DFS, IDS
+from utils import calculateManhattan, calculateEuclidean, isSolvable
 
 class PuzzleApp(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("8-Puzzle Solver")
-        self.setFixedSize(400, 400)
+        self.setFixedSize(400, 500)
         
         # Create a central widget
         centralWidget = QWidget(self)
@@ -26,11 +26,11 @@ class PuzzleApp(QMainWindow):
                 label = QLabel(" ")
                 label.setFixedSize(50, 50)
                 label.setStyleSheet("""
-                    border: 1px solid black;
+                    border: 2px solid #333;
                     font-size: 20px;
                     text-align: center;
-                    background-color: lightgray;
-                    color: black;
+                    background-color: #f0f0f0;
+                    color: #333;
                     padding: 10px;
                     """)
                 label.setAlignment(Qt.AlignCenter)
@@ -49,6 +49,11 @@ class PuzzleApp(QMainWindow):
         inputLayout.addWidget(self.updateButton)
         mainLayout.addLayout(inputLayout)
         
+        # Create dropdown for selecting search algorithm
+        self.algorithmComboBox = QComboBox()
+        self.algorithmComboBox.addItems(["A* Manhattan", "A* Euclidean", "BFS", "DFS", "IDS"])
+        mainLayout.addWidget(self.algorithmComboBox)
+        
         # Create control buttons
         self.solveButton = QPushButton("Solve")
         self.solveButton.clicked.connect(self.solve)
@@ -66,6 +71,11 @@ class PuzzleApp(QMainWindow):
         buttonLayout.addWidget(self.skipButton)
         mainLayout.addLayout(buttonLayout)
         
+        # Create a label for displaying messages
+        self.messageLabel = QLabel("")
+        self.messageLabel.setStyleSheet("color: red; font-size: 16px;")
+        mainLayout.addWidget(self.messageLabel)
+        
         self.solutionPath = []
         self.currentStep = 0
 
@@ -75,14 +85,32 @@ class PuzzleApp(QMainWindow):
             for i in range(3):
                 for j in range(3):
                     self.puzzleLabels[i][j].setText(state[i * 3 + j])
+            self.messageLabel.setText("")  # Clear any previous message
         else:
-            print("Invalid input state")
+            self.messageLabel.setText("Invalid input state")
 
     def solve(self):
         start = self.inputField.text()
         goal = "012345678"
-        self.solutionPath, explored, t = aStar(start, goal, calculateManhattan)
+        if not isSolvable(start):
+            self.messageLabel.setText("This puzzle is unsolvable.")
+            return
+
+        algorithm = self.algorithmComboBox.currentText()
+        
+        if algorithm == "A* Manhattan":
+            self.solutionPath, explored, t= aStar(start, goal, calculateManhattan)
+        elif algorithm == "A* Euclidean":
+            self.solutionPath, explored, t = aStar(start, goal, calculateEuclidean)
+        elif algorithm == "BFS":
+            self.solutionPath, explored, t = BFS(start, goal)
+        elif algorithm == "DFS":
+            self.solutionPath, explored, t = DFS(start, goal)
+        elif algorithm == "IDS":
+            self.solutionPath, explored, t= IDS(start, goal)
+        
         self.currentStep = 0
+        self.messageLabel.setText(f"Path found with {algorithm}.")
         print("Path:", self.solutionPath)
 
     def nextStep(self):

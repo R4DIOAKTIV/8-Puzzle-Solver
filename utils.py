@@ -50,3 +50,12 @@ def getChildren(state):
             children.append("".join("".join(row) for row in child))
     
     return children
+
+def isSolvable(state):
+    inversions = 0
+    state = [int(x) for x in state if x != '0']
+    for i in range(len(state)):
+        for j in range(i + 1, len(state)):
+            if state[i] > state[j]:
+                inversions += 1
+    return inversions % 2 == 0
