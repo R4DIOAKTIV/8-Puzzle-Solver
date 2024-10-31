@@ -8,23 +8,22 @@ This repo contains our work for 8-Puzzle Solver using different searching algori
 Table of Contents
 =================
 
-   * [8-Puzzle Solver](#8-puzzle-solver)
-   * [Table of Contents](#table-of-contents)
-   * [How to run](#how-to-run)
-   * [state representation](#state-representation)
-     * [Node Class](#node-class)
-     * [util functions](#helper-functions)
-   * [Algorithms](#algorithm)
-      * [BFS](#bfs)
-      * [DFS](#dfs)
-      * [A*](#a)
-            * [Manhattan Distance](#manhattan-distance)
-            * [Euclidean Distance](#euclidean-distance)
-      * [IDS](#ids)
-    * [Results](#results)
-    * [GUI](#gui)
-    * [Members](#members)
-
+* [8-Puzzle Solver](#8-puzzle-solver)
+* [Table of Contents](#table-of-contents)
+* [How to run](#how-to-run)
+* [State Representation](#state-representation)
+  * [Node Class](#node-class)
+  * [Helper Functions](#helper-functions)
+* [Algorithms](#algorithms)
+  * [BFS](#bfs)
+  * [DFS](#dfs)
+  * [A*](#a)
+    * [Manhattan Distance](#manhattan-distance)
+    * [Euclidean Distance](#euclidean-distance)
+  * [IDS](#ids)
+* [Results](#results)
+* [GUI](#gui)
+* [Members](#members)
 # How to run
 - Clone the repo: 
 ```bash
