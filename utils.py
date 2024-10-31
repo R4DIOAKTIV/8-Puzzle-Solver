@@ -38,7 +38,7 @@ def getChildren(state):
     blankRow, blankCol = next((i, j) for i in range(3) for j in range(3) if state_2d[i][j] == "0")
     
     children = []
-    moves = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # Up, Down, Left, Right
+    moves = [(1, 0), (-1, 0), (0, -1), (0, 1)]  # Down, Up, Left, Right
 
     for dr, dc in moves:
         newRow, newCol = blankRow + dr, blankCol + dc
