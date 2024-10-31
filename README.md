@@ -130,3 +130,8 @@ For our results, we used this initial state: '702853614' to test the algorithms.
 
 # GUI
 The GUI is implemented using PyQT5. It allows the user to select the algorithm they want to use and enter the initial state of the puzzle. The user can then click the solve button to get the solution. The GUI displays the path length, nodes explored, and time taken for the selected algorithm.
+
+# Members
+- Ibrahim Mohamed - 7790
+- Hattan Youssri - 7774
+- Ahmed Reda - 7417
