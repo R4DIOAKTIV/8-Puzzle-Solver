@@ -112,7 +112,13 @@ class PuzzleApp(QMainWindow):
             self.solutionPath, explored, t, max_depth= IDS(start, goal)
         
         self.currentStep = 0
-        self.messageLabel.setText(f"Path found with {algorithm}.")
+        self.messageLabel.setText(
+            f"Path found with {algorithm}.\n"
+            f"Nodes explored: {len(explored)}\n"
+            f"Time taken: {t:.2f} seconds\n"
+            f"Max depth explored: {max_depth}\n"
+            f"Cost of path: {len(self.solutionPath) - 1}"
+        )
         print("Path:", self.solutionPath)
 
     def nextStep(self):
