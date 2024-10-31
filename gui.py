@@ -1,8 +1,8 @@
 import sys
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QVBoxLayout, QGridLayout, QWidget, QLineEdit, QHBoxLayout, QComboBox
 from PyQt5.QtCore import Qt  # Import Qt namespace
-from main import aStar, BFS, DFS, IDS
-from utils import calculateManhattan, calculateEuclidean, isSolvable
+from main import*
+from utils import*
 
 class PuzzleApp(QMainWindow):
     def __init__(self):
@@ -63,19 +63,21 @@ class PuzzleApp(QMainWindow):
         self.backwardButton.clicked.connect(self.previousStep)
         self.skipButton = QPushButton("Skip")
         self.skipButton.clicked.connect(self.skipToSolution)
+        self.randomButton = QPushButton("Random")
+        self.randomButton.clicked.connect(self.randomizePuzzle)
         
         buttonLayout = QHBoxLayout()
         buttonLayout.addWidget(self.solveButton)
-        buttonLayout.addWidget(self.nextButton)
         buttonLayout.addWidget(self.backwardButton)
+        buttonLayout.addWidget(self.nextButton)
         buttonLayout.addWidget(self.skipButton)
+        buttonLayout.addWidget(self.randomButton)
         mainLayout.addLayout(buttonLayout)
         
         # Create a label for displaying messages
         self.messageLabel = QLabel("")
         self.messageLabel.setStyleSheet("color: red; font-size: 16px;")
         mainLayout.addWidget(self.messageLabel)
-        
         self.solutionPath = []
         self.currentStep = 0
 
@@ -122,6 +124,11 @@ class PuzzleApp(QMainWindow):
         if self.currentStep > 0:
             self.currentStep -= 1
             self.updatePuzzleFromState(self.solutionPath[self.currentStep])
+
+    def randomizePuzzle(self):
+        state = randomState()
+        self.inputField.setText("".join(state))
+        self.updatePuzzle()
 
     def skipToSolution(self):
         if self.solutionPath:
