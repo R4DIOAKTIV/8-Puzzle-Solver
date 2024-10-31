@@ -72,6 +72,43 @@ The A\* Search algorithm uses a priority queue (min-heap) to select the node wit
 - `g` is the cost from the start node to the current node.
 - `h` is the heuristic estimate from the current node to the goal.
 The heuristic functions used can be Manhattan or Euclidean distance. This algorithm efficiently finds the shortest path to the goal by considering both the cost to reach a node and the estimated cost to reach the goal from that node.
+### Manhattan Distance
+It is the sum of the absolute differences between the current position of a tile and its goal position. It is done using this simple function:
+```python
+def calculateManhattan(state):
+    # Could be removed if we choose to represent the state as a 2D array
+    state_2d = [list(state[i:i+3]) for i in range(0, len(state), 3)]
+    
+    goal = "012345678"
+    manhattan = 0
+    for i in range(3):
+        for j in range(3):
+            if state_2d[i][j] != "0":  # Skip the blank tile
+                goalIndex = goal.index(state_2d[i][j])
+                goalRow = goalIndex // 3
+                goalCol = goalIndex % 3
+                manhattan += abs(i - goalRow) + abs(j - goalCol)
+    return manhattan
+```
+### Euclidean Distance
+It is the straight-line distance between the current position of a tile and its goal position. It is done using this simple function:
+```python
+def calculateEuclidean(state):
+    # Could be removed if we choose to represent the state as a 2D array
+    state_2d = [list(state[i:i+3]) for i in range(0, len(state), 3)]
+    
+    goal = "012345678"
+    euclidean = 0
+    for i in range(3):
+        for j in range(3):
+            if state_2d[i][j] != "0":  # Skip the blank tile
+                goalIndex = goal.index(state_2d[i][j])
+                goalRow = goalIndex // 3
+                goalCol = goalIndex % 3
+                euclidean += math.sqrt((i - goalRow)**2 + (j - goalCol)**2)
+    return euclidean
+``` 
+
 
 ## DLS Implementation
 
