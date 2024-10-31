@@ -26,17 +26,21 @@ def aStar(start, goal, heuristic):
     heapq.heappush(frontier, startNode)
     explored = set()
     cost_so_far = {start: 0}  # Tracks the lowest g cost to each state
+    max_depth = 0
 
     while frontier:
         currentNode = heapq.heappop(frontier)
         
+        if currentNode.g > max_depth:
+            max_depth = currentNode.g
+
         if currentNode.state == goal:
             path = []
             while currentNode:
                 path.append(currentNode.state)
                 currentNode = currentNode.parent
             t = time.time() - t
-            return path[::-1], explored, t
+            return path[::-1], explored, t, max_depth
 
         explored.add(currentNode.state)
         
@@ -60,11 +64,16 @@ def BFS(start, goal):
     frontier.put(startNode)
     explored = set()
     frontier_set = {start}
+    max_depth = 0
 
     while not frontier.empty():
         currentNode = frontier.get()
         frontier_set.remove(currentNode.state)
         explored.add(currentNode.state)
+
+        if currentNode.g > max_depth:
+            max_depth = currentNode.g
+
 
         if currentNode.state == goal:
             path = []
@@ -72,7 +81,7 @@ def BFS(start, goal):
                 path.append(currentNode.state)
                 currentNode = currentNode.parent
             t = time.time() - t
-            return path[::-1], explored, t
+            return path[::-1], explored, t, max_depth
 
         for childState in getChildren(currentNode.state):
             if childState not in explored and childState not in frontier_set:
@@ -89,12 +98,15 @@ def DFS(start, goal):
     frontier = [startNode]
     explored = set()
     frontier_set = {start}  # Track nodes currently in frontier
-
+    max_depth = 0
 
     while frontier:
         currentNode = frontier.pop()
         frontier_set.remove(currentNode.state)
         explored.add(currentNode.state)
+
+        if currentNode.g > max_depth:
+            max_depth = currentNode.g
 
         if currentNode.state == goal:
             path = []
@@ -102,7 +114,7 @@ def DFS(start, goal):
                 path.append(currentNode.state)
                 currentNode = currentNode.parent
             t = time.time() - t
-            return path[::-1], explored, t
+            return path[::-1], explored, t, max_depth
 
         for childState in getChildren(currentNode.state):
             if childState not in explored and childState not in frontier_set:
@@ -117,10 +129,12 @@ def DLS(start, goal, limit):
     startNode = Node(start, None, 0, 0)
     frontier = [(startNode, 0)]
     explored = set()
+
     while frontier:
         currentNode, depth = frontier.pop()
         if depth > limit:
             continue
+
         if currentNode.state == goal:
             path = []
             while currentNode:
@@ -129,10 +143,12 @@ def DLS(start, goal, limit):
             t = time.time() - t
             return path[::-1], explored, t
         explored.add(currentNode.state)
+
         for childState in getChildren(currentNode.state):
             if childState not in explored:
                 childNode = Node(childState, currentNode, 0, 0)
                 frontier.append((childNode, depth + 1))
+
     return None, explored, time.time() - t  
 
 def IDS(start, goal):
@@ -147,6 +163,7 @@ def IDS(start, goal):
 if __name__ == "__main__":
     start = "702853614"
     goal = "012345678"
+    
     ts=[]
     manhattanPath, manhattanexplored, t = aStar(start, goal, calculateManhattan)
     # print(f"Manhattan path: {manhattanPath}")
@@ -154,24 +171,28 @@ if __name__ == "__main__":
     print(f"number of nodes explored: {len(manhattanexplored)}")
     print(f"time taken: {t}\n\n\n")
     ts.append(t)
+    
     euclideanPath, euclideanexplored, t = aStar(start, goal, calculateEuclidean)
     # print(f"Euclidean path: {euclideanPath}")
     print(f"Length of Euclidean path: {len(euclideanPath) - 1}")
     print(f"number of nodes explored: {len(euclideanexplored)}") 
     print(f"time taken: {t}\n\n\n")
     ts.append(t)
+    
     bfsPath, bfsexplored, t = BFS(start, goal)
     # print(f"BFS path: {bfsPath}")
     print(f"Length of BFS path: {len(bfsPath) - 1}")
     print(f"number of nodes explored: {len(bfsexplored)}")
     print(f"time taken: {t}\n\n\n")
     ts.append(t)
+    
     dfsPath, dfsexplored, t = DFS(start, goal)
     # print(f"DFS path: {dfsPath}")
     print(f"Length of DFS path: {len(dfsPath) - 1}")
     print(f"number of nodes explored: {len(dfsexplored)}")
     print(f"time taken: {t}\n\n\n")
     ts.append(t)    
+    
     idsPath, idsexplored, t = IDS(start, goal)
     # print(f"IDS path: {idsPath}")
     print(f"Length of IDS path: {len(idsPath) - 1}")
